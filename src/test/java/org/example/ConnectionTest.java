@@ -1,5 +1,6 @@
 package org.example;
 
+import org.example.files.ReadConnectionData;
 import org.example.files.ReadCredentials;
 import org.junit.jupiter.api.Test;
 
@@ -35,9 +36,7 @@ public class ConnectionTest {
         int errorCode = 0;
         String errorMessage = "";
 
-        //Connection connection = null;
-        try(Connection connection = DriverManager.getConnection("jdbc:oracle:thin:@155.158.112.45:1521:oltpstud",login,pass)){
-            //connection = DriverManager.getConnection("jdbc:oracle:thin:@155.158.112.45:1521:oltpstud",login,pass);
+        try(Connection connection = DriverManager.getConnection(new ReadConnectionData().getConString(),login,pass)){
             if(connection == null){
                 status = "Brak polaczenia";
             }else{

@@ -12,7 +12,6 @@ public class ReadCredentials {
         this.pass = "";
 
         try (BufferedReader br = new BufferedReader(new FileReader("src/files/login_and_pass.txt"))){
-            //br = new BufferedReader( new FileReader("files\\multiline.txt") );
             String str;
             String[] cred;
 

@@ -1,5 +1,7 @@
 package org.example;
 
+import org.example.files.ReadConnectionData;
+
 import java.sql.*;
 
 public class OracleCon {
@@ -14,40 +16,12 @@ public class OracleCon {
 
     private OracleCon(){}
 
-    Statement getStmt(){
-        return stmt;
-    }
-
-    Connection getCon(){
-        return con;
-    }
-
-    Boolean getLogged(){
-        return logged;
-    }
-
     Boolean isConn(){
-        if(con != null){
-            return true;
-        }else{
-            return false;
-        }
-    }
-
-    void batchStmt(String query) throws SQLException {
-        stmt.addBatch(query);
+        return con != null;
     }
 
     void setLogged(Boolean logged){
-        this.logged = logged;
-    }
-
-    String getUser(){
-        return user;
-    }
-
-    String getPass(){
-        return pass;
+        OracleCon.logged = logged;
     }
 
     ResultSet getRs(){
@@ -76,36 +50,26 @@ public class OracleCon {
         return null;
     }
 
-    public SQLException executeBatch(){
+    public SQLException createConnection(String user, String pass){
+        this.user = user;
+        this.pass = pass;
         try{
-            stmt.executeBatch();
+            //Class.forName("oracle.jdbc.driver.OracleDriver");
+            this.con = DriverManager.getConnection(
+                    new ReadConnectionData().getConString(),this.user,this.pass);   //"jdbc:oracle:thin:@localhost:1521:xe"
+            stmt=con.createStatement();
         }catch(SQLException e){
+            this.con = null;
             return e;
         }
         return null;
     }
 
-    public SQLException createConnection(String user, String pass){
-        try{
-            Class.forName("oracle.jdbc.driver.OracleDriver");
-            this.con = DriverManager.getConnection(
-                    "jdbc:oracle:thin:@155.158.112.45:1521:oltpstud",user,pass);   //"jdbc:oracle:thin:@localhost:1521:xe"
-            stmt=con.createStatement();
-        }catch(SQLException | ClassNotFoundException e){
-            this.con = null;
-            return (SQLException) e;
-        }
-        this.user = user;
-        this.pass = pass;
-        return null;
-    }
-
-    public SQLException closeConn(){
+    public void closeConn(){
         try{
             con.close();
         }catch(SQLException e){
-            return e;
+            e.printStackTrace();
         }
-        return null;
     }
 }
