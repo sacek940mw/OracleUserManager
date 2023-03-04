@@ -1,8 +1,6 @@
 package org.example;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 public class LoginForm {
@@ -38,6 +36,7 @@ public class LoginForm {
             }else{
                 infoLabel.setText(msg.toString());
             }
+            oc.setLogged(false);
             return false;
         }else{
             oc.setLogged(true);
